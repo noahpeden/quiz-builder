@@ -42,6 +42,10 @@ class App extends Component {
     })
   }
 
+  displayScore(){
+    return <div>{this.state.message}</div>
+  }
+
   render() {
     let quizzes = this.state.quizzes
     return (
