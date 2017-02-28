@@ -9,8 +9,9 @@ class App extends Component {
     super()
     this.state = {
       quizzes: null,
+      scoreObj: {},
       total: 0,
-      message: ''
+      message: null
     }
   }
   componentDidMount(){
@@ -22,19 +23,18 @@ class App extends Component {
       })
     })
   }
-  setScore(score){
-    let total = this.state.total
+
+  setScore(id, score){
+    let total = this.state.scoreObj
+    Object.assign(total, {[id]: score})
     this.setState({
-      total: total += score
+      scoreObj: total
     })
-    console.log('boom');
   }
 
   sendScore(){
     axios
-    .post('/scores', {
-      score: this.state.total
-    })
+    .post('/scores', {score: this.state.total})
     .then((response) => {
       this.setState({
         message: response.data.score
@@ -42,17 +42,25 @@ class App extends Component {
     })
   }
 
-  displayScore(){
-    return <div>{this.state.message}</div>
+  submit(){
+    let total = this.state.scoreObj
+    let scoreState = Object.keys(total).reduce((obj, eachNumber)=> {
+      return obj + total[eachNumber]
+    }, 0)
+    this.setState({
+      total: scoreState
+    })
+    this.sendScore()
   }
 
   render() {
     let quizzes = this.state.quizzes
     return (
       <div className="App">
-        {quizzes ? quizzes.map(quiz => <Quiz data={quiz} key={quiz.id} total={this.state.total} setScore={this.setScore.bind(this)}/>): <p>...</p>}
-        <button onClick={this.sendScore()}>Submit</button>
-
+        {quizzes ? quizzes.map(quiz => <Quiz data={quiz} key={quiz.id} setScore={this.setScore.bind(this)}/>): <p>...</p>}
+        <button onClick={() => this.submit()}>Submit</button>
+        {this.state.total}
+        <div>{this.state.message}</div>
     </div>
     );
   }

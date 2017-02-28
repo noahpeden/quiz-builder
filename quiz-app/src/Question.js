@@ -7,7 +7,7 @@ export default class Quiz extends Component {
     return (
       <div>
         <h3>{title}</h3>
-        {answers ? answers.map((answer, index) => <Answer key={index} data={answer} name={title} total={this.props.total} setScore={this.props.setScore}/>) : <p>Loading</p>}
+        {answers ? answers.map((answer, index) => <Answer key={index} data={answer} name={title} total={this.props.total} setScore={this.props.setScore} id={this.props.id}/>) : <p>Loading</p>}
       </div>
     )
   }

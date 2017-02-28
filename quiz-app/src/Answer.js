@@ -10,7 +10,7 @@ export default class Answer extends Component {
       <div>
         <input type="radio"
                name={name}
-               onClick={(e) => this.props.setScore(score)}
+               onClick={(e) => this.props.setScore(this.props.id, score)}
                value={score}/>
                {title}
       </div>
